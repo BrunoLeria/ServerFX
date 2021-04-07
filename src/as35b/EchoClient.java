@@ -11,7 +11,7 @@ public class EchoClient {
         if (args.length > 0)
            serverHostname = args[0];
         System.out.println ("Attemping to connect to host " +
-                serverHostname + " on port 10008.");
+                serverHostname + " on port 8899.");
 
         Socket echoSocket = null;
         PrintWriter out = null;
