@@ -63,7 +63,7 @@ public class EchoServer extends Application {
 
         Platform.runLater(() -> {
             try {
-                runThread(serverSocket.accept());
+                runThread();
             } catch (IOException ex) {
                 Logger.getLogger(EchoServer.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -87,13 +87,19 @@ public class EchoServer extends Application {
         });
     }
 
-    public void runThread(Socket clientSocket) throws IOException {
+    public void runThread() throws IOException {
         serverSocket = new ServerSocket(8899);
         serverSocket.setSoTimeout(10000);
         showMessage("Connection Socket Created");
         System.out.println("Connection Socket Created");
-        System.out.println("serverSocket.accept()");
+        System.out.println("serverSocket.accept()");        
         new Thread(() -> {
+            Socket clientSocket = null;
+            try {
+                clientSocket = serverSocket.accept();
+            } catch (IOException ex) {
+                Logger.getLogger(EchoServer.class.getName()).log(Level.SEVERE, null, ex);
+            }
             showMessage("New Communication Thread Started");
             System.out.println("New Communication Thread Started");
             try {
