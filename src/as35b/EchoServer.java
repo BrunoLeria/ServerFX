@@ -38,13 +38,12 @@ public class EchoServer extends Application {
     public EchoServer() {
         this.ta = new TextArea();
     }
-    
+
     @FXML
-    public void append(){
+    public void append() {
         System.out.println("Botton");
         ta.appendText("Teste");
     }
-    
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -55,34 +54,21 @@ public class EchoServer extends Application {
         primaryStage.setTitle("Server");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
-        primaryStage.show();        
+        primaryStage.show();
 
         System.out.println("Tela Pronta");
 
-        try {
-            serverSocket = new ServerSocket(8899);
-            showMessage("Connection Socket Created");
-            System.out.println("Connection Socket Created");
+        showMessage("Waiting for Connection");
+        System.out.println("Waiting for Connection");
+
+        Platform.runLater(() -> {
             try {
-                serverSocket.setSoTimeout(10000);
-                showMessage("Waiting for Connection");
-                System.out.println("Waiting for Connection");
-                
-                Platform.runLater(() ->{
-                    try {
-                        runThread(serverSocket.accept());
-                    } catch (IOException ex) {
-                        Logger.getLogger(EchoServer.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                });
-            } catch (IOException e) {
-                showMessage("Accept failed." + e.getMessage());
-                System.exit(1);
+                runThread(serverSocket.accept());
+            } catch (IOException ex) {
+                Logger.getLogger(EchoServer.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (IOException e) {
-            showMessage("Could not listen on port: 10008." + e.getMessage());
-            System.exit(1);
-        } 
+        });
+
     }
 
     /**
@@ -101,7 +87,11 @@ public class EchoServer extends Application {
         });
     }
 
-    public void runThread(Socket clientSocket) {
+    public void runThread(Socket clientSocket) throws IOException {
+        serverSocket = new ServerSocket(8899);
+        serverSocket.setSoTimeout(10000);
+        showMessage("Connection Socket Created");
+        System.out.println("Connection Socket Created");
         System.out.println("serverSocket.accept()");
         new Thread(() -> {
             showMessage("New Communication Thread Started");
@@ -129,10 +119,10 @@ public class EchoServer extends Application {
                     if (inputLine.equals("End Server.")) {
                         serverContinue = false;
                     }
-                }                    
+                }
                 in.close();
                 clientSocket.close();
-                    
+
             } catch (IOException e) {
                 showMessage("Problem with Communication Server");
                 System.exit(1);
@@ -140,4 +130,3 @@ public class EchoServer extends Application {
         }).start();
     }
 }
-
