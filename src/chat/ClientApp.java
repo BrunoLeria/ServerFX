@@ -30,7 +30,7 @@ public class ClientApp extends Application {
             messages.appendText(message + "\n");
 
             json.append("message", message);
-            
+
             DataPacket packet = new DataPacket(
                     new Encryptor().enc(json.toString().getBytes())
             );
@@ -66,16 +66,16 @@ public class ClientApp extends Application {
     }
 
     private Client createClient() {
-        return new Client("127.0.0.1", 55555, data -> {
+        return new Client("127.0.0.1", 8899, data -> {
             DataPacket packet = (DataPacket) data;
             byte[] original = new Encryptor().dec(packet.getRawBytes());
 
             Platform.runLater(() -> {
                 messages.appendText(new String(original) + "\n");
             });
-        });
+        });             
     }
-
+    
     public static void main(String[] args) {
         launch(args);
     }

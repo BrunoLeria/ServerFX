@@ -31,7 +31,7 @@ public class ServerApp extends Application {
             messages.appendText(message + "\n");
             
             json.append("message", message);
-            
+
             DataPacket packet = new DataPacket(
                     new Encryptor().enc(json.toString().getBytes())
             );
@@ -66,7 +66,7 @@ public class ServerApp extends Application {
     }
 
     private Server createServer() {
-        return new Server(55555, data -> {
+        return new Server(8899, data -> {
             DataPacket packet = (DataPacket) data;
             byte[] original = new Encryptor().dec(packet.getRawBytes());
 
@@ -75,7 +75,7 @@ public class ServerApp extends Application {
             });
         });
     }
-
+    
     public static void main(String[] args) {
         launch(args);
     }
